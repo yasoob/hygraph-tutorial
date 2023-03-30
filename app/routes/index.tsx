@@ -10,9 +10,11 @@ export function links() {
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
-  const symbol = url.searchParams.get("symbol");
+  let symbol = url.searchParams.get("symbol");
 
-  console.log(symbol);
+  if (!symbol) {
+    symbol = "IBM";
+  }
   const hygraph = new GraphQLClient(process.env.HYGRAPH_URL || "");
   hygraph.setHeader("Authorization", `Bearer ${process.env.API_TOKEN}`);
 
@@ -48,7 +50,7 @@ export default function Index() {
 
   // console.log(newchartdata)
   const dataFormatter = (number: number) =>
-    `${Intl.NumberFormat("us").format(number).toString()}%`;
+    `\$${Intl.NumberFormat("us").format(number).toString()}`;
 
 
   return (
